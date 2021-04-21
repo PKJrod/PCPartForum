@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,14 @@ namespace PCPartForum.Models
             options.Password.RequireUppercase = true;
             options.Password.RequiredLength = 8;
             options.Password.RequireNonAlphanumeric = false;
+        }
+
+        public static async Task<IdentityUser> GetUserByEmailUsernameAsync( UserManager<IdentityUser> _userManager)
+        {
+            IdentityUser foundUser = await _userManager.Users
+                                                .Where(user => user.Email == "Email" || user.UserName == "Username")
+                                                .SingleOrDefaultAsync();
+            return foundUser;
         }
     }
 }
