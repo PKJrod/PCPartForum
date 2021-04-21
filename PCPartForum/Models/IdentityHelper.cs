@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PCPartForum.Models
 {
-    public class IdentityHelper
+    public static class IdentityHelper
     {
         public static void SetIdentityOptions(IdentityOptions options)
         {
