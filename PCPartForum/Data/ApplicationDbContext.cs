@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,5 +13,7 @@ namespace PCPartForum.Data
             : base(options)
         {
         }
+
+        public virtual DbSet<Electronic> Electronics { get; set; }
     }
 }
