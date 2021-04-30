@@ -23,13 +23,5 @@ namespace PCPartForum.Models
             options.Password.RequiredLength = 8;
             options.Password.RequireNonAlphanumeric = false;
         }
-
-        public static async Task<IdentityUser> GetUserByEmailUsernameAsync( UserManager<IdentityUser> _userManager)
-        {
-            IdentityUser foundUser = await _userManager.Users
-                                                .Where(user => user.Email == "Email" || user.UserName == "Username")
-                                                .SingleOrDefaultAsync();
-            return foundUser;
-        }
     }
 }

@@ -45,7 +45,8 @@ namespace PCPartForum.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            public string Username { get; set; }
+            [Display(Name = "Username/Email")]
+            public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -78,10 +79,16 @@ namespace PCPartForum.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var userName = Input.Email;
 
-                IdentityUser foundUser = await IdentityHelper.GetUserByEmailUsernameAsync(_userManager);
+                if (userName.Contains("@"))
+                {
+                    var user = await _userManager.FindByEmailAsync(userName);
+                    userName = user.UserName;
+                }
 
-                var result = await _signInManager.PasswordSignInAsync(foundUser, Input.Password, Input.RememberMe, false);
+
+                var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, false);
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 // var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
