@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
