@@ -40,11 +40,18 @@ namespace PCPartForum.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add(IFormCollection collection)
+        public async Task<IActionResult> Add(Electronic elect)
         {
-            return null;
+            if(ModelState.IsValid)
+            {
+                await ElectronicsDb.AddElectronicAsync(_context, elect);
+
+                return RedirectToAction("Index");
+            }
+
+            return View();
         }
+
 
         // EDIT
         [HttpGet]
