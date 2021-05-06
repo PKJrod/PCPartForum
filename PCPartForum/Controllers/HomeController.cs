@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PCPartForum.Data;
 using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,18 @@ namespace PCPartForum.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Electronic> electronics = await ElectronicsDb.GetElectronicsAsync(_context);
+            return View(electronics);
         }
 
         public IActionResult Privacy()
