@@ -61,7 +61,11 @@ namespace PCPartForum.Models
 
             foreach(string role in roles)
             {
-                
+                bool doesRoleExist = await roleManager.RoleExistsAsync(role);
+                if(!doesRoleExist)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
             }
         }
     }
