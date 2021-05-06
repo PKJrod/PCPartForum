@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PCPartForum.Data;
+using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,19 @@ namespace PCPartForum.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public ProductController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         // INDEX/INFO
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            List<Electronic> electronics = await ElectronicsDb.GetElectronicsAsync(_context);
+
+            return View(electronics);
         }
 
         [HttpGet]
