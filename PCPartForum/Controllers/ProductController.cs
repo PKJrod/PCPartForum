@@ -19,7 +19,7 @@ namespace PCPartForum.Controllers
         }
         // INDEX/INFO
         [HttpGet]
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             List<Electronic> electronics = await ElectronicsDb.GetElectronicsAsync(_context);
 
@@ -27,7 +27,7 @@ namespace PCPartForum.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             return View();
         }
@@ -55,16 +55,22 @@ namespace PCPartForum.Controllers
 
         // EDIT
         [HttpGet]
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
+            return View(elect);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(Electronic elect)
         {
-            return null;
+            if(ModelState.IsValid)
+            {
+                _context.Entry(elect).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
         }
 
         // DELETE
