@@ -18,6 +18,7 @@ namespace PCPartForum.Controllers
         {
             _context = context;
         }
+
         // INDEX/INFO
         [HttpGet]
         public async Task<IActionResult> Index()
