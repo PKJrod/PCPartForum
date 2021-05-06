@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PCPartForum.Data;
 using PCPartForum.Models;
 using System;
@@ -75,16 +76,23 @@ namespace PCPartForum.Controllers
 
         // DELETE
         [HttpGet]
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
+
+            return View(elect);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteElectronic(int id)
         {
-            return null;
+            Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
+
+            _context.Entry(elect).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }
