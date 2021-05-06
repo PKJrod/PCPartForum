@@ -23,5 +23,20 @@ namespace PCPartForum.Models
             options.Password.RequiredLength = 8;
             options.Password.RequireNonAlphanumeric = false;
         }
+
+        public static async Task<String> FindByEmailOrEmailAsync
+            (this UserManager<IdentityUser> userManager, string usernameOrEmail)
+        {
+            if (usernameOrEmail.Contains("@"))
+            {
+                var user = await userManager.FindByEmailAsync(usernameOrEmail);
+                if (user != null)
+                {
+                    usernameOrEmail = user.UserName;
+                }
+            }
+
+            return usernameOrEmail;
+        }
     }
 }
