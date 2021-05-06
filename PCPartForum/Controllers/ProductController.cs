@@ -28,9 +28,10 @@ namespace PCPartForum.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
+            return View(elect);
         }
 
         // ADD
