@@ -25,7 +25,7 @@ namespace PCPartForum.Models
         }
 
         public static async Task<String> FindByEmailOrEmailAsync
-            (this UserManager<IdentityUser> userManager, string usernameOrEmail)
+            (UserManager<IdentityUser> userManager, string usernameOrEmail)
         {
             if (usernameOrEmail.Contains("@"))
             {
