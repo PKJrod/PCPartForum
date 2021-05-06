@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using PCPartForum.Models;
 
 namespace PCPartForum.Areas.Identity.Pages.Account
 {
@@ -46,7 +45,7 @@ namespace PCPartForum.Areas.Identity.Pages.Account
         {
             [Required]
             [Display(Name = "Username/Email")]
-            public string Email { get; set; }
+            public string Username { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -79,16 +78,10 @@ namespace PCPartForum.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var userName = Input.Email;
 
-                if (userName.Contains("@"))
-                {
-                    var user = await _userManager.FindByEmailAsync(userName);
-                    userName = user.UserName;
-                }
+                Input.Username = await PCPartForum.Models.IdentityHelper.FindByEmailOrEmailAsync(_userManager, Input.Username);
 
-
-                var result = await _signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, false);
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 // var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -108,7 +101,7 @@ namespace PCPartForum.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Sorry not able to verify login");
                     return Page();
                 }
             }
