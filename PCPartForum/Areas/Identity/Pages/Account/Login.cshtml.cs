@@ -12,19 +12,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using PCPartForum.Models;
 
 namespace PCPartForum.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<UserProfile> _userManager;
+        private readonly SignInManager<UserProfile> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, 
+        public LoginModel(SignInManager<UserProfile> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<UserProfile> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -45,7 +46,7 @@ namespace PCPartForum.Areas.Identity.Pages.Account
         {
             [Required]
             [Display(Name = "Username/Email")]
-            public string Username { get; set; }
+            public string UsernameOrEmail { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -79,9 +80,9 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
 
-                Input.Username = await PCPartForum.Models.IdentityHelper.FindByEmailOrEmailAsync(_userManager, Input.Username);
+                Input.UsernameOrEmail = await PCPartForum.Models.IdentityHelper.FindByUsernameOrEmailAsync(_userManager, Input.UsernameOrEmail);
 
-                var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(Input.UsernameOrEmail, Input.Password, Input.RememberMe, false);
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 // var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);

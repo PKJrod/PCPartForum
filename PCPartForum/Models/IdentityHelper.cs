@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PCPartForum.Models;
@@ -32,8 +32,8 @@ namespace PCPartForum.Models
             options.Password.RequireNonAlphanumeric = false;
         }
 
-        public static async Task<String> FindByEmailOrEmailAsync
-            (UserManager<IdentityUser> userManager, string usernameOrEmail)
+        public static async Task<String> FindByUsernameOrEmailAsync
+            (UserManager<UserProfile> userManager, string usernameOrEmail)
         {
             if (usernameOrEmail.Contains("@"))
             {
@@ -80,12 +80,14 @@ namespace PCPartForum.Models
             const string username = "ForumAdmin";
             const string password = "Gettingstarted";
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<UserProfile>>();
 
             // Check if any users are in database
             if (userManager.Users.Count() == 0)
             {
-                IdentityUser admin = new IdentityUser()
+                UserProfile admin = new UserProfile()
+
                 {
                     Email = email,
                     UserName = username
