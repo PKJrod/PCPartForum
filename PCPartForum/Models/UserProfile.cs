@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace PCPartForum.Models
 {
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/aspnet/core/security/authentication/add-user-data?view=aspnetcore-5.0&tabs=visual-studio
+    /// explains how to refactor for anything using IdentityUser 
+    /// </summary>
     public class UserProfile : IdentityUser
     {
         [Key]
