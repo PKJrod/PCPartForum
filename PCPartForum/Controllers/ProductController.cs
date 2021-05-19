@@ -96,5 +96,13 @@ namespace PCPartForum.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchResults(string search)
+        {
+            List<Electronic> electronics = await ElectronicsDb.GetSearchElectronicsAsync(_context, search);
+
+            return View(electronics);
+        }
     }
 }
