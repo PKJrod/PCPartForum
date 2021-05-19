@@ -32,7 +32,7 @@ namespace PCPartForum.Models
             options.Password.RequireNonAlphanumeric = false;
         }
 
-        public static async Task<String> FindByEmailOrEmailAsync
+        public static async Task<String> FindByUsernameOrEmailAsync
             (UserManager<IdentityUser> userManager, string usernameOrEmail)
         {
             if (usernameOrEmail.Contains("@"))
