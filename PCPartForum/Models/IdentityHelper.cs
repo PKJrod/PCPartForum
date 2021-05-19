@@ -33,7 +33,7 @@ namespace PCPartForum.Models
         }
 
         public static async Task<String> FindByUsernameOrEmailAsync
-            (UserManager<IdentityUser> userManager, string usernameOrEmail)
+            (UserManager<UserProfile> userManager, string usernameOrEmail)
         {
             if (usernameOrEmail.Contains("@"))
             {
@@ -80,12 +80,12 @@ namespace PCPartForum.Models
             const string username = "ForumAdmin";
             const string password = "Gettingstarted";
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<UserProfile>>();
 
             // Check if any users are in database
             if (userManager.Users.Count() == 0)
             {
-                IdentityUser admin = new IdentityUser()
+                UserProfile admin = new UserProfile()
                 {
                     Email = email,
                     UserName = username
