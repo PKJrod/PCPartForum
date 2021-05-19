@@ -68,5 +68,35 @@ namespace PCPartForum.Models
                 }
             }
         }
+
+        /// <summary>
+        /// Will give a role to designated email or name
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        internal static async Task CreateDefaultAdmin(IServiceProvider serviceProvider)
+        {
+            const string email = "ForumManager@cptc.edu";
+            const string username = "ForumAdmin";
+            const string password = "Gettingstarted";
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            // Check if any users are in database
+            if (userManager.Users.Count() == 0)
+            {
+                IdentityUser admin = new IdentityUser()
+                {
+                    Email = email,
+                    UserName = username
+                };
+
+                // Create instructor
+                await userManager.CreateAsync(admin, password);
+
+                // Add to instructor role
+                await userManager.AddToRoleAsync(admin, Admin);
+            }
+        }
     }
 }

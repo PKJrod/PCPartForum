@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PCPartForum.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<UserProfile>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
