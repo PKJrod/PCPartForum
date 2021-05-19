@@ -30,5 +30,13 @@ namespace PCPartForum.Data
                                            select elect).SingleAsync();
             return electronic;
         }
+
+        public async static Task<List<Electronic>> GetSearchElectronicsAsync(ApplicationDbContext _context, string search)
+        {
+            return await (from electronic in _context.Electronics
+                          where electronic.Name.Contains(search)
+                          orderby electronic.Name ascending
+                          select electronic).ToListAsync();
+        }
     }
 }

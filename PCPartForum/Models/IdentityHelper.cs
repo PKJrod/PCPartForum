@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PCPartForum.Models;
@@ -80,12 +80,14 @@ namespace PCPartForum.Models
             const string username = "ForumAdmin";
             const string password = "Gettingstarted";
 
+
             var userManager = serviceProvider.GetRequiredService<UserManager<UserProfile>>();
 
             // Check if any users are in database
             if (userManager.Users.Count() == 0)
             {
                 UserProfile admin = new UserProfile()
+
                 {
                     Email = email,
                     UserName = username
