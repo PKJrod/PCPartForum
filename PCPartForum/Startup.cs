@@ -28,6 +28,9 @@ namespace PCPartForum
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection
+            services.AddTransient<IStorageHelper, BlobStorageHelper>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
