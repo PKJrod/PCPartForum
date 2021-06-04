@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PCPartForum.Data;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PCPartForum.Controllers
 {
+    
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,12 +39,14 @@ namespace PCPartForum.Controllers
 
         // ADD
         [HttpGet]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public ActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public async Task<IActionResult> Add(Electronic elect)
         {
             if(ModelState.IsValid)
@@ -58,6 +62,7 @@ namespace PCPartForum.Controllers
 
         // EDIT
         [HttpGet]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public async Task<IActionResult> Edit(int id)
         {
             Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
@@ -65,6 +70,7 @@ namespace PCPartForum.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public async Task<IActionResult> Edit(Electronic elect)
         {
             if(ModelState.IsValid)
@@ -78,6 +84,7 @@ namespace PCPartForum.Controllers
 
         // DELETE
         [HttpGet]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
@@ -87,6 +94,7 @@ namespace PCPartForum.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = IdentityHelper.Admin)]
         public async Task<IActionResult> DeleteElectronic(int id)
         {
             Electronic elect = await ElectronicsDb.GetElectronicAsync(_context, id);
