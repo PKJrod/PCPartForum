@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PCPartForum.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +19,10 @@ namespace PCPartForum.Models
         public const string Informant = "Informant";
         public const string Admin = "Admin";
 
+        public enum FileType
+        {
+            Photo, Video, Audio, Text
+        }
 
         public static void SetIdentityOptions(IdentityOptions options)
         {
@@ -99,6 +105,39 @@ namespace PCPartForum.Models
                 // Add to instructor role
                 await userManager.AddToRoleAsync(admin, Admin);
             }
+        }
+
+        public static bool IsFileEmpty(IFormFile file)
+        {
+            if(file.Length == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        public static bool IsValidExtension(IFormFile file, FileType type)
+        {
+            string extension = Path.GetExtension(file.FileName).ToLower();
+
+            switch(type)
+            {
+                case FileType.Photo:
+                    string[] userPictureExtension = { ".png", ".gif", ".jpg" };
+                    if (userPictureExtension.Contains(extension))
+                        return true;
+                    return false;
+                case FileType.Video:
+                    break;
+                case FileType.Audio:
+                    break;
+                case FileType.Text:
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
         }
     }
 }

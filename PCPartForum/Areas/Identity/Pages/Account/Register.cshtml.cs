@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +66,10 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [NotMapped]
+            [Display(Name = "Profile Picture")]
+            public IFormFile ProfilePicture { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -78,7 +84,23 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             // ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new UserProfile { UserName = Input.Username, Email = Input.Email };
+                IFormFile UserProfilePic = Input.ProfilePicture;
+
+                if (IdentityHelper.IsFileEmpty(UserProfilePic))
+                {
+                    string path = "wwwroot/Image/bubblybackground.jpg";
+                    byte[] data = await System.IO.File.ReadAllBytesAsync(path);
+                    string fileName = "default.jpg";
+                    IFormFile defaultProfilePic = (IFormFile)File(data, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+                    Input.ProfilePicture = defaultProfilePic;
+                }
+
+                if(!IdentityHelper.IsValidExtension(UserProfilePic, IdentityHelper.FileType.Photo))
+                {
+
+                }
+
+                var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
