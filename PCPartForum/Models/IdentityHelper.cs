@@ -107,15 +107,26 @@ namespace PCPartForum.Models
             }
         }
 
-        public static bool IsFileEmpty(IFormFile file)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool IsProfilePictureNotSet(IFormFile file)
         {
-            if(file.Length == 0)
+            if(file == null)
             {
                 return true;
             }
             return false;
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool IsValidExtension(IFormFile file, FileType type)
         {
             string extension = Path.GetExtension(file.FileName).ToLower();

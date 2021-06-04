@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -26,17 +27,20 @@ namespace PCPartForum.Areas.Identity.Pages.Account
         private readonly UserManager<UserProfile> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IStorageHelper _blobHelper;
 
         public RegisterModel(
             UserManager<UserProfile> userManager,
             SignInManager<UserProfile> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IStorageHelper blobHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _blobHelper = blobHelper;
         }
 
         [BindProperty]
@@ -86,12 +90,10 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             {
                 IFormFile UserProfilePic = Input.ProfilePicture;
 
-                if (IdentityHelper.IsFileEmpty(UserProfilePic))
+                if (IdentityHelper.IsProfilePictureNotSet(UserProfilePic))
                 {
                     string path = "wwwroot/Image/bubblybackground.jpg";
-                    byte[] data = await System.IO.File.ReadAllBytesAsync(path);
-                    string fileName = "default.jpg";
-                    IFormFile defaultProfilePic = (IFormFile)File(data, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+                    IFormFile defaultProfilePic = 
                     Input.ProfilePicture = defaultProfilePic;
                 }
 
@@ -100,7 +102,9 @@ namespace PCPartForum.Areas.Identity.Pages.Account
 
                 }
 
-                var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture };
+                string newFileName = await _blobHelper.UploadBlob(UserProfilePic);
+
+                var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture, PhotoUrl = newFileName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
