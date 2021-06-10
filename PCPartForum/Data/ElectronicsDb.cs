@@ -16,6 +16,13 @@ namespace PCPartForum.Data
                           select electronic).ToListAsync();
         }
 
+        public async static Task<List<Electronic>> GetRecentElectronicsAsync(ApplicationDbContext _context)
+        {
+            return await (from electronic in _context.Electronics
+                          orderby electronic.TimeCreated descending
+                          select electronic).ToListAsync();
+        }
+
         public static async Task<Electronic> AddElectronicAsync(ApplicationDbContext _context, Electronic electronic)
         {
             _context.Electronics.Add(electronic);

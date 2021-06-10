@@ -18,5 +18,7 @@ namespace PCPartForum.Models
         public double Price { get; set; }
 
         public string Category { get; set; }
+
+        public DateTime TimeCreated { get; set; }
     }
 }

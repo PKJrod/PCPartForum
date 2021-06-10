@@ -51,6 +51,7 @@ namespace PCPartForum.Controllers
         {
             if(ModelState.IsValid)
             {
+                elect.TimeCreated = System.DateTime.Now;
                 await ElectronicsDb.AddElectronicAsync(_context, elect);
 
                 return RedirectToAction("Index");
