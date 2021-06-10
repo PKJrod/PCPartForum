@@ -1,14 +1,18 @@
 ﻿@model IEnumerable<PCPartForum.Models.Electronic>
+@using System.Web;
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
-<p>
-    <a asp-action="Add">Add Electronic</a>
-</p>
+@if(this.User.IsInRole(IdentityHelper.Admin))
+{
+    <h4>
+        <a asp-action="Add">Add Electronic</a>
+    </h4>
+}
+    
 <table class="table">
     <thead>
         <tr>
@@ -42,11 +46,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Category)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
+            @if (this.User.IsInRole(IdentityHelper.Admin))
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+            }
+            else
+            {
+        <td>
+            <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+        </td>
+                
+            }
+
         </tr>
 }
     </tbody>
