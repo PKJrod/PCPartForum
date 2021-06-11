@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +27,20 @@ namespace PCPartForum.Areas.Identity.Pages.Account
         private readonly UserManager<UserProfile> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IStorageHelper _blobHelper;
 
         public RegisterModel(
             UserManager<UserProfile> userManager,
             SignInManager<UserProfile> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IStorageHelper blobHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _blobHelper = blobHelper;
         }
 
         [BindProperty]
@@ -64,6 +70,10 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [NotMapped]
+            [Display(Name = "Profile Picture")]
+            public IFormFile ProfilePicture { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -78,7 +88,31 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             // ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new UserProfile { UserName = Input.Username, Email = Input.Email };
+                IFormFile UserProfilePic = Input.ProfilePicture;
+                /* Will need to find out how to use a default profile image
+                 * have an idea on how about doing it
+                 * https://forums.asp.net/t/2020001.aspx?showing+default+image+for+user+profile
+                if (IdentityHelper.IsProfilePictureNotSet(UserProfilePic))
+                {
+                    string path = "wwwroot/Image/bubblybackground.jpg";
+                    FileInfo defaultPic = new FileInfo(path);
+                    IFormFile defaultProfilePic = IdentityHelper.ConvertingDefaultProfiletoFormFile(defaultPic);
+                    Input.ProfilePicture = defaultProfilePic;
+                }
+                
+                if(!IdentityHelper.IsValidExtension(UserProfilePic, IdentityHelper.FileType.Photo))
+                {
+
+                }
+                */
+
+                string newFileName = null;
+                if(UserProfilePic != null) 
+                {
+                    newFileName = await _blobHelper.UploadBlob(UserProfilePic);
+                }
+
+                var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture, PhotoUrl = newFileName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

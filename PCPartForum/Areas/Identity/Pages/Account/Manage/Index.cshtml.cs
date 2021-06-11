@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -33,6 +35,10 @@ namespace PCPartForum.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [NotMapped]
+            [Display(Name = "Profile Picture")]
+            public IFormFile ProfilePicture { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -47,6 +53,7 @@ namespace PCPartForum.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                ProfilePicture = user.ProfilePicture,
                 PhoneNumber = phoneNumber
             };
         }
@@ -87,6 +94,13 @@ namespace PCPartForum.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            if(Input.ProfilePicture != user.ProfilePicture)
+            {
+                user.ProfilePicture = Input.ProfilePicture;
+            }
+
+            await _userManager.UpdateAsync(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
