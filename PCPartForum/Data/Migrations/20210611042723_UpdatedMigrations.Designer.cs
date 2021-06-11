@@ -10,8 +10,8 @@ using PCPartForum.Data;
 namespace PCPartForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210611041403_updatedDB")]
-    partial class updatedDB
+    [Migration("20210611042723_UpdatedMigrations")]
+    partial class UpdatedMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
