@@ -89,20 +89,28 @@ namespace PCPartForum.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 IFormFile UserProfilePic = Input.ProfilePicture;
-
+                /* Will need to find out how to use a default profile image
+                 * have an idea on how about doing it
+                 * https://forums.asp.net/t/2020001.aspx?showing+default+image+for+user+profile
                 if (IdentityHelper.IsProfilePictureNotSet(UserProfilePic))
                 {
                     string path = "wwwroot/Image/bubblybackground.jpg";
-                    IFormFile defaultProfilePic = 
+                    FileInfo defaultPic = new FileInfo(path);
+                    IFormFile defaultProfilePic = IdentityHelper.ConvertingDefaultProfiletoFormFile(defaultPic);
                     Input.ProfilePicture = defaultProfilePic;
                 }
-
+                
                 if(!IdentityHelper.IsValidExtension(UserProfilePic, IdentityHelper.FileType.Photo))
                 {
 
                 }
+                */
 
-                string newFileName = await _blobHelper.UploadBlob(UserProfilePic);
+                string newFileName = null;
+                if(UserProfilePic != null) 
+                {
+                    newFileName = await _blobHelper.UploadBlob(UserProfilePic);
+                }
 
                 var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture, PhotoUrl = newFileName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
