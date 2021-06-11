@@ -22,7 +22,7 @@ namespace PCPartForum.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<Electronic> electronics = await ElectronicsDb.GetElectronicsAsync(_context);
+            List<Electronic> electronics = await ElectronicsDb.GetRecentElectronicsAsync(_context);
             return View(electronics);
         }
 
