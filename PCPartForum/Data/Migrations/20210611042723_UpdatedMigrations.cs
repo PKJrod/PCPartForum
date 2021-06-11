@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
-namespace PCPartForum.Data.Migrations
+namespace PCPartForum.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class UpdatedMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +39,10 @@ namespace PCPartForum.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Bio = table.Column<string>(nullable: true),
+                    PhotoUrl = table.Column<string>(nullable: true),
+                    JoinedWeb = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,11 +50,28 @@ namespace PCPartForum.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Electronics",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Manufacturer = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Price = table.Column<double>(nullable: false),
+                    Category = table.Column<string>(nullable: true),
+                    TimeCreated = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Electronics", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +92,7 @@ namespace PCPartForum.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -209,6 +228,9 @@ namespace PCPartForum.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Electronics");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

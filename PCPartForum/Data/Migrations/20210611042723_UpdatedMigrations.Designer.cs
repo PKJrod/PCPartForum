@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PCPartForum.Data;
 
-namespace PCPartForum.Data.Migrations
+namespace PCPartForum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210519050128_userprofile")]
-    partial class userprofile
+    [Migration("20210611042723_UpdatedMigrations")]
+    partial class UpdatedMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -175,6 +175,9 @@ namespace PCPartForum.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("TimeCreated")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ProductId");
 
                     b.ToTable("Electronics");
@@ -228,17 +231,14 @@ namespace PCPartForum.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
