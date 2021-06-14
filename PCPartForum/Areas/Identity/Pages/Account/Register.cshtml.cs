@@ -109,7 +109,7 @@ namespace PCPartForum.Areas.Identity.Pages.Account
                 string newFileName = null;
                 if(UserProfilePic != null) 
                 {
-                    newFileName = await _blobHelper.UploadBlob(UserProfilePic);
+                    newFileName = await _blobHelper.UploadBlobToAzure(UserProfilePic);
                 }
 
                 var user = new UserProfile { UserName = Input.Username, Email = Input.Email, ProfilePicture = Input.ProfilePicture, PhotoUrl = newFileName };

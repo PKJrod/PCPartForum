@@ -2,6 +2,8 @@
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,29 +24,32 @@ namespace PCPartForum.Models
         /// <summary>
         /// Method to use blob storage for profile pictures to save on resources
         /// https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-dotnet
+        /// if running to issues with azure
+        /// https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows
         /// </summary>
         /// <param name="profilepicture"></param>
         /// <returns></returns>
-        public async Task<string> UploadBlob(IFormFile profilepicture)
+        public async Task<string> UploadBlobToAzure(IFormFile profilepicture)
         {
             string connect = _config.GetSection("BlobStorageString").Value;
-
-            BlobServiceClient blobService = new BlobServiceClient(connect);
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(connect);
 
             //Ensure Create container to hold blobs
-            BlobContainerClient containerClient = blobService.GetBlobContainerClient("userprofilephoto");
+            var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            var containerClient = cloudBlobClient.GetContainerReference("profilepic");
 
-            if (!containerClient.Exists())
+            if (await containerClient.CreateIfNotExistsAsync())
             {
-                await containerClient.CreateAsync();
-                await containerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
+                await containerClient.SetPermissionsAsync(
+                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Off });
             }
 
             // Add Blob to container
             string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(profilepicture.FileName);
-            BlobClient blobClient = containerClient.GetBlobClient(newFileName);
+            var blobClient = containerClient.GetBlockBlobReference(newFileName);
+            blobClient.Properties.ContentType = profilepicture.ContentType;
 
-            await blobClient.UploadAsync(profilepicture.OpenReadStream());
+            await blobClient.UploadFromStreamAsync(profilepicture.OpenReadStream());
             return newFileName;
         }
     }
