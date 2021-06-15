@@ -89,6 +89,7 @@ namespace PCPartForum
                                                 , IdentityHelper.TrustedSource
                                                 , IdentityHelper.Informant
                                                 , IdentityHelper.Admin).Wait();
+            IdentityHelper.CreateDefaultAdmin(serviceProvider.ServiceProvider).Wait();
         }
     }
     internal static class StartupExtensions

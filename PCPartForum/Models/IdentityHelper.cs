@@ -92,7 +92,7 @@ namespace PCPartForum.Models
             var userManager = serviceProvider.GetRequiredService<UserManager<UserProfile>>();
 
             // Check if any users are in database
-            if (userManager.Users.Count() == 0)
+            if (userManager.Users.Count() < 4)
             {
                 UserProfile admin = new UserProfile()
 

@@ -31,7 +31,7 @@ namespace PCPartForum.Models
         /// <returns></returns>
         public async Task<string> UploadBlobToAzure(IFormFile profilepicture)
         {
-            string connect = _config.GetSection("BlobStorageString").Value;
+            string connect = _config.GetSection("ConnectionStrings:BlobStorageString").Value;
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(connect);
 
             //Ensure Create container to hold blobs
