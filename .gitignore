@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PCPartForum/Properties/ServiceDependencies/PCPartForum - Web Deploy/mssql1.arm.json
+/PCPartForum/Properties/ServiceDependencies/PCPartForum - Web Deploy/profile.arm.json
+/PCPartForum/Properties/ServiceDependencies/PCPartForum - Web Deploy/storage1.arm.json
+/PCPartForum/.config/dotnet-tools.json
+/PCPartForum/Properties/serviceDependencies.PCPartForum - Web Deploy.json

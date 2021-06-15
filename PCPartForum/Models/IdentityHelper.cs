@@ -108,7 +108,7 @@ namespace PCPartForum.Models
                 await userManager.AddToRoleAsync(admin, Admin);
             }
         }
-
+/*
         /// <summary>
         /// 
         /// </summary>
@@ -187,5 +187,6 @@ namespace PCPartForum.Models
 
             return fileMock.Object;
         }
+*/
     }
 }

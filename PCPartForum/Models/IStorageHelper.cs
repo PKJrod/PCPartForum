@@ -5,6 +5,6 @@ namespace PCPartForum.Models
 {
     public interface IStorageHelper
     {
-        Task<string> UploadBlob(IFormFile profilepicture);
+        Task<string> UploadBlobToAzure(IFormFile profilepicture);
     }
 }
