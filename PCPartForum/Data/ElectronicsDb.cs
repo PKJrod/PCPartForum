@@ -45,5 +45,13 @@ namespace PCPartForum.Data
                           orderby electronic.Name ascending
                           select electronic).ToListAsync();
         }
+
+        public async static Task<List<Electronic>> GetCategoryElectronicsAsync(ApplicationDbContext _context, string category)
+        {
+            return await (from electronic in _context.Electronics
+                          where electronic.Category.Contains(category)
+                          orderby electronic.Name ascending
+                          select electronic).ToListAsync();
+        }
     }
 }

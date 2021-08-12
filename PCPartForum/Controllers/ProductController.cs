@@ -113,5 +113,13 @@ namespace PCPartForum.Controllers
 
             return View(electronics);
         }
+            
+        [HttpGet]
+        public async Task<IActionResult> Categories(string category)
+        {
+            List<Electronic> electronics = await ElectronicsDb.GetCategoryElectronicsAsync(_context, category);
+
+            return View(electronics);
+        }
     }
 }
