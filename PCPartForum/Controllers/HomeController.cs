@@ -28,12 +28,11 @@ namespace PCPartForum.Controllers
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
-            await page.GotoAsync("https://playwright.dev/dotnet");
-            var name = await page.QuerySelectorAsync(".highlight_xwNb");
-            var returned = await name.InnerTextAsync();
+            await page.GotoAsync("https://www.newegg.com/d/best-sellers?cm_sp=Head_Navigation-_-Under_Search_Bar-_-Best+Sellers&icid=623089");
+            var element1 = await page.QuerySelectorAsync("#item_cell_9SIA12KE7F2072__0:has(a.item-title)");
+            var element2 = await element1.QuerySelectorAsync(".item-title");
+            var returned = await element2.InnerTextAsync();
             ViewBag.Message = returned;
-            //PlaywrightHelper test = new PlaywrightHelper();
-            //ViewBag.Message = test.getName();
             return View(electronics);
         }
 
