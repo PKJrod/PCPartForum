@@ -29,8 +29,9 @@ namespace PCPartForum.Controllers
             await using var browser = await playwright.Chromium.LaunchAsync();
             var page = await browser.NewPageAsync();
             await page.GotoAsync("https://playwright.dev/dotnet");
-            var name = await page.QuerySelectorAsync("h1");
-            ViewBag.Message = name.InnerTextAsync().ToString();
+            var name = await page.QuerySelectorAsync(".highlight_xwNb");
+            var returned = await name.InnerTextAsync();
+            ViewBag.Message = returned;
             //PlaywrightHelper test = new PlaywrightHelper();
             //ViewBag.Message = test.getName();
             return View(electronics);
