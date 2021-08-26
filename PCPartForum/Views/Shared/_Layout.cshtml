@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PCPartForum</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,13 +24,38 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <form class="form-inline" method="get">
+                                <input name="category" type="hidden" value="gpu">
+                                <button class="btn" type="submit" value="gpu" asp-controller="Product" asp-action="Categories">
+                                    GPUs
+                                </button>
+                            </form>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Electronics</a>
+                            <form class="form-inline" method="get">
+                                <input name="category" type="hidden" value="cpu">
+                                <button class="btn" type="submit" value="cpu" asp-controller="Product" asp-action="Categories">
+                                    CPUs
+                                </button>
+                            </form>
                         </li>
+
+                        <li class="nav-item">
+                            <form class="form-inline" method="get">
+                                <input name="category" type="hidden" value="monitors">
+                                <button class="btn" type="submit" value="monitors" asp-controller="Product" asp-action="Categories">
+                                    Monitors
+                                </button>
+                            </form>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index"> All Electronics</a>
+                        </li>
+
                         <li>
                             <form class="form-inline">
                                 <input name="search" class="form-control" type="search" placeholder="Search">
@@ -39,7 +64,7 @@
                                 </button>
                             </form>
                         </li>
-                        
+
                     </ul>
                 </div>
                 
