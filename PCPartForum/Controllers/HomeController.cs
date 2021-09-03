@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Playwright;
 using PCPartForum.Data;
 using PCPartForum.Models;
 using System;
@@ -23,6 +24,15 @@ namespace PCPartForum.Controllers
         public async Task<IActionResult> Index()
         {
             List<Electronic> electronics = await ElectronicsDb.GetRecentElectronicsAsync(_context);
+
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync();
+            var page = await browser.NewPageAsync();
+            await page.GotoAsync("https://www.newegg.com/d/best-sellers?cm_sp=Head_Navigation-_-Under_Search_Bar-_-Best+Sellers&icid=623089");
+            var element1 = await page.QuerySelectorAsync(".item-cell");
+            var element2 = await element1.QuerySelectorAsync(".item-title");
+            var returned = await element2.InnerTextAsync();
+            ViewBag.Message = returned;
             return View(electronics);
         }
 
